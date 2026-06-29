@@ -1,5 +1,6 @@
 import { createClient } from '@/app/lib/supabase/server';
 import { createTask } from './actions';
+import { TaskItem } from './task-item';
 import { revalidatePath } from 'next/cache';
 
 type Task = {
@@ -22,7 +23,7 @@ export default async function Page() {
     // ? （引数にはformタグ内のinput要素の値が渡ってくる？）
     const title = formData.get('title') as string;
     // ?
-    await createTask(title, 'dummy-user-id');
+    await createTask(title);
     // ?
     revalidatePath('/tasks');
   }
@@ -36,7 +37,7 @@ export default async function Page() {
       </form>
       <ul>
         {data?.map((task) => (
-          <li key={task.id}>{task.title}</li>
+          <TaskItem key={task.id} id={task.id} title={task.title} completed={task.completed} />
         ))}
       </ul>
     </div>
